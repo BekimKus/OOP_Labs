@@ -45,6 +45,8 @@ public:
 
 	char* toString();
 
+	char* toStringWithPtr();
+
 	~Array();
 
 private:

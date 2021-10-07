@@ -155,6 +155,23 @@ void Array::setPtrArray(int* ptrArray)
 }
 
 char* Array::toString()
+{
+	char ch[255] = "";
+
+	for (int i = 0; i < index; i++) {
+		char val[10] = "";
+		_itoa_s(ptrArray[i], val, 10);
+		strcat_s(ch, sizeof(ch), val);
+		strcat_s(ch, sizeof(ch), " \0");
+	}
+
+	char* ptr = new char[sizeof(ch)];
+	strcpy_s(ptr, sizeof(ch), ch);
+
+	return ptr;
+}
+
+char* Array::toStringWithPtr()
 {	
 	char* ch = new char[255];
 	char* chPtr = ch;
@@ -185,6 +202,7 @@ char* Array::toString()
 
 Array::~Array()
 {
+	delete[] ptrArray;
 	cout << "\n---------------------------------\n";
 	cout << "Объект " << this << " удален \n---------------------------------\n";
 }
@@ -206,7 +224,6 @@ char* Array::intToChar(int number)
 		length++;
 	}
 
-
 	char* ch = new char[length];
 	char* chPtr = ch;
 	for (int i = 0; reversedNumber != 0; i++, reversedNumber /= 10, chPtr++) {
@@ -221,22 +238,3 @@ char* Array::intToChar(int number)
 
 	return ch;
 }
-
-/*
-char* Array::toString()
-{
-	char ch[255] = "";
-	int* temp = ptrArray;
-
-	for (int i = 0; i < arraySize; i++, temp++) {
-		strcat_s(ch, sizeof(ch), intToChar(*temp));
-		strcat_s(ch, sizeof(ch), " \0");
-	}
-
-	char* ptr = new char[sizeof(ch)];
-	strcpy_s(ptr, sizeof(ch), ch);
-
-	return ptr;
-}
-
-	*/

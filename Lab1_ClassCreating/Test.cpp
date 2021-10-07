@@ -2,11 +2,14 @@
 
 void Test::test1()
 {
+    cout << "\n==============================================\n\n";
+    cout << "Тест номер 1: Проверка методов класса\n\n\n";
+
     int array[15] = { 3, 453, 6549, 83, 85, 3, 1, 12, 5, 659, 69 };
     int* ptrArray = array;
     Array myArr(15, 11, ptrArray);
 
-    cout << std::endl << "Изначальный массив: " << myArr.toString() << "\n\n";
+    cout << "Изначальный массив: " << myArr.toString() << "\n\n";
 
     cout << "Добавим число 76 в начало массива\n";
     myArr.add(76, 0);
@@ -66,6 +69,9 @@ void Test::test1()
 
 void Test::test2()
 {
+    cout << "\n==============================================\n\n";
+    cout << "Тест номер 2: Проверка методов класса\n\n\n";
+
     Array myArr;
 
     cout << "Индекс: " << myArr.getIndex() << ", Элемент: " << myArr.getElement(myArr.getIndex())
