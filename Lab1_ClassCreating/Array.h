@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <string.h>
+#include "ArrayException.h"
 
 using std::cout;
 

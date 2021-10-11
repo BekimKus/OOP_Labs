@@ -34,10 +34,12 @@ void Array::sort()
 
 void Array::add(int value, int index)
 {	
+	if (index > this->index) throw ArrayException(ArrayException::Error::INDEX_BIGGER_MAX_SIZE);
+	if (index < 0) throw ArrayException(ArrayException::Error::INDEX_LESS_0);
+
 	// Increase memory for array
 	if (this->index == arraySize) {
 		int* temp1 = new int[arraySize * 2];
-		//cout << "Выделим новую память для массива...\n";
 		memcpy_s(temp1, arraySize * sizeof(int) * 2, ptrArray, arraySize * sizeof(int));
 		arraySize *= 2;
 		ptrArray = temp1;
@@ -61,10 +63,11 @@ void Array::add(int value)
 	// Increase memory for array
 	if (index == arraySize) {
 		int* temp = new int[arraySize * 2];
-		//cout << "Выделим новую память для массива...\n";
 		memcpy_s(temp, arraySize * sizeof(int) * 2, ptrArray, arraySize * sizeof(int));
 		arraySize *= 2;
 		ptrArray = temp;
+		for (int i = index; i < arraySize; i++)
+			ptrArray[i] = -1;
 	}
 	ptrArray[index] = value;
 	this->index++;
@@ -72,6 +75,8 @@ void Array::add(int value)
 
 int Array::getElement(int index)
 {
+	if (index < 0) throw ArrayException(ArrayException::Error::INDEX_LESS_0);
+	if (index > this->index) throw ArrayException(ArrayException::Error::INDEX_BIGGER_MAX_SIZE);
 	return ptrArray[index];
 }
 
@@ -89,11 +94,17 @@ int Array::findElement(int value)
 
 void Array::replace(int value, int index)
 {
+	if (index < 0) throw ArrayException(ArrayException::Error::INDEX_LESS_0);
+	if (index > this->index) throw ArrayException(ArrayException::Error::INDEX_BIGGER_MAX_SIZE);
 	ptrArray[index] = value;
 }
 
 void Array::deleteElement(int index)
 {
+	if (index < 0) throw ArrayException(ArrayException::Error::INDEX_LESS_0);
+	if (index > this->index) throw ArrayException(ArrayException::Error::INDEX_BIGGER_MAX_SIZE);
+
+
 	int* temp = ptrArray;
 	temp += index;
 
@@ -140,11 +151,23 @@ int* Array::getPtrArray()
 
 void Array::setArraySize(int arraySize)
 {
+	if (arraySize < 0) throw ArrayException(ArrayException::Error::MAX_SIZE_LESS_0);
+
 	this->arraySize = arraySize;
+	if (index > arraySize) index == arraySize;
+
+	int* temp = new int[arraySize + 1];
+	memcpy_s(temp, (arraySize + 1) * sizeof(int), ptrArray, (arraySize + 1) * sizeof(int));
+	delete[] ptrArray;
+	ptrArray = temp;
+	for (int i = index; i < arraySize; i++)
+		ptrArray[i] = -1;
 }
 
 void Array::setIndex(int index)
 {
+	if (index < 0) throw ArrayException(ArrayException::Error::INDEX_LESS_0);
+	if (index > this->index) throw ArrayException(ArrayException::Error::INDEX_BIGGER_MAX_SIZE);
 	this->index = index;
 }
 
@@ -172,7 +195,7 @@ char* Array::toString()
 }
 
 char* Array::toStringWithPtr()
-{	
+{
 	char* ch = new char[255];
 	char* chPtr = ch;
 	int* temp = ptrArray;
@@ -203,8 +226,6 @@ char* Array::toStringWithPtr()
 Array::~Array()
 {
 	delete[] ptrArray;
-	cout << "\n---------------------------------\n";
-	cout << "Объект " << this << " удален \n---------------------------------\n";
 }
 
 char* Array::intToChar(int number)
