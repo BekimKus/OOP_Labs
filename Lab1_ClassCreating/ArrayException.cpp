@@ -7,10 +7,24 @@ ArrayException::ArrayException(int code) : std::exception()
 
 const char* ArrayException::what() const throw()
 {
-    if (code == Error::INDEX_LESS_0) return "Exception: Index less then 0";
-    else if (code == Error::INDEX_BIGGER_MAX_SIZE) return "Exception: Index bigger then max array size";
-    else if (code == Error::INDEX_ERROR) return "Exception: Incorrect Index";
-    else if (code == Error::MAX_SIZE_LESS_0) return "Exception: Max array size less then 0";
-    else if (code == Error::MAX_SIZE_ERROR) return "Exception: Incorrect max array size";
-    else return "Unknown exception";
+    switch (code) {
+        case Error::INDEX_LESS_0:
+            return "Exception: Index less then 0";
+        case Error::INDEX_BIGGER_MAX_SIZE:
+            return "Exception: Index bigger then max array size";
+        case Error::INDEX_ERROR:
+            return "Exception: Incorrect Index";
+        case Error::MAX_SIZE_LESS_0:
+            return "Exception: Max array size less then 0";
+        case Error::MAX_SIZE_ERROR:
+            return "Exception: Incorrect max array size";
+        case Error::MAP_KEY_NOT_FOUND:
+            return "Exception: The key isn't in the map";
+        case Error::MAP_KEY_EMPTY:
+            return "Exception: The input key is empty or null";
+        case Error::NEGATIVE_VALUE:
+            return "Exception: Incorrect input value";
+        default:
+            return "Unknown exception";
+    }
 }

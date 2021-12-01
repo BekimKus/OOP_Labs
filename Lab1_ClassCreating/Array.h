@@ -12,15 +12,16 @@ public:
 
 	Array(int arraySize, int index, int* ptrArray);
 
-	Array(const Array& array);
+	Array(Array& array);
 
 	Array();
+
 
 	void sort();
 
 	void add(int value, int index);
 
-	void add(int value);
+	virtual void add(int value);
 
 	int getElement(int index);
 
@@ -44,9 +45,25 @@ public:
 
 	void setPtrArray(int* ptrArray);
 
-	char* toString();
+	virtual char* toString();
 
 	char* toStringWithPtr();
+
+	bool isEqual(Array& array);
+
+	Array& operator=(Array& array);
+
+	friend Array& operator+(Array& array1, Array& array2);
+
+	friend Array& operator-(Array& array1, Array& array2);
+
+	friend Array& operator-(Array& array, int index);
+
+	Array& operator--(void);
+	
+	Array& operator--(int d);
+
+	int& operator[](const int index);
 
 	~Array();
 

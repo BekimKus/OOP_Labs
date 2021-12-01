@@ -2,19 +2,19 @@
 
 Array::Array(int arraySize, int index, int* ptrArray) : arraySize(arraySize), index(index), ptrArray(ptrArray) {}
 
-Array::Array(const Array& array) : arraySize(array.arraySize), index(array.index), ptrArray(array.ptrArray) {}
+Array::Array(Array& array)
+{
+	arraySize = array.getArraySize();
+	index = array.getIndex();
+	ptrArray = array.getPtrArray();
+}
 
 Array::Array()
 {
 	this->arraySize = 5;
 	this->index = 0;
 	this->ptrArray = new int[arraySize];
-
-	int* temp = ptrArray;
-	for (int i = 0; i < arraySize; i++, temp++) {
-		*temp = -1;
-	}
-
+	memset(ptrArray, -1, getArraySize() * sizeof(int));
 }
 
 void Array::sort()
@@ -36,9 +36,10 @@ void Array::add(int value, int index)
 {	
 	if (index > this->index) throw ArrayException(ArrayException::Error::INDEX_BIGGER_MAX_SIZE);
 	if (index < 0) throw ArrayException(ArrayException::Error::INDEX_LESS_0);
+	if (value < 0) throw ArrayException(ArrayException::Error::NEGATIVE_VALUE);
 
 	// Increase memory for array
-	if (this->index == arraySize) {
+	if (this->index == arraySize - 1) {
 		int* temp1 = new int[arraySize * 2];
 		memcpy_s(temp1, arraySize * sizeof(int) * 2, ptrArray, arraySize * sizeof(int));
 		arraySize *= 2;
@@ -60,8 +61,10 @@ void Array::add(int value, int index)
 
 void Array::add(int value)
 {
+	if (value < 0) throw ArrayException(ArrayException::Error::NEGATIVE_VALUE);
+
 	// Increase memory for array
-	if (index == arraySize) {
+	if (index == arraySize - 1) {
 		int* temp = new int[arraySize * 2];
 		memcpy_s(temp, arraySize * sizeof(int) * 2, ptrArray, arraySize * sizeof(int));
 		arraySize *= 2;
@@ -77,16 +80,14 @@ int Array::getElement(int index)
 {
 	if (index < 0) throw ArrayException(ArrayException::Error::INDEX_LESS_0);
 	if (index > this->index) throw ArrayException(ArrayException::Error::INDEX_BIGGER_MAX_SIZE);
+
 	return ptrArray[index];
 }
 
 int Array::findElement(int value)
 {
-	int* temp = ptrArray;
-	for (int i = 0; i < arraySize; i++, temp++) {
-		if (value == *temp) {
-			return i;
-		}
+	for (int i = 0; i < arraySize; i++) {
+		if (value == ptrArray[i]) return i;
 	}
 
 	return -1;
@@ -96,6 +97,8 @@ void Array::replace(int value, int index)
 {
 	if (index < 0) throw ArrayException(ArrayException::Error::INDEX_LESS_0);
 	if (index > this->index) throw ArrayException(ArrayException::Error::INDEX_BIGGER_MAX_SIZE);
+	if (value < 0) throw ArrayException(ArrayException::Error::NEGATIVE_VALUE);
+
 	ptrArray[index] = value;
 }
 
@@ -103,7 +106,6 @@ void Array::deleteElement(int index)
 {
 	if (index < 0) throw ArrayException(ArrayException::Error::INDEX_LESS_0);
 	if (index > this->index) throw ArrayException(ArrayException::Error::INDEX_BIGGER_MAX_SIZE);
-
 
 	int* temp = ptrArray;
 	temp += index;
@@ -123,7 +125,7 @@ void Array::deleteElement(int index)
 
 void Array::collapse()
 {
-	if (index < arraySize) {
+	if (index < arraySize - 1) {
 		int* temp = new int[index];
 		memcpy_s(temp, index * sizeof(int), ptrArray, index * sizeof(int));
 		delete[] ptrArray;
@@ -154,27 +156,34 @@ void Array::setArraySize(int arraySize)
 	if (arraySize < 0) throw ArrayException(ArrayException::Error::MAX_SIZE_LESS_0);
 
 	this->arraySize = arraySize;
-	if (index > arraySize) index == arraySize;
+	if (index > arraySize) index == arraySize - 1;
 
 	int* temp = new int[arraySize + 1];
-	memcpy_s(temp, (arraySize + 1) * sizeof(int), ptrArray, (arraySize + 1) * sizeof(int));
+	memset(temp, -1, (arraySize + 1) * sizeof(int));
+	memcpy_s(temp, (arraySize + 1) * sizeof(int), ptrArray, arraySize * sizeof(int));
 	delete[] ptrArray;
 	ptrArray = temp;
+	/*
 	for (int i = index; i < arraySize; i++)
 		ptrArray[i] = -1;
+	*/
+
 }
 
 void Array::setIndex(int index)
 {
 	if (index < 0) throw ArrayException(ArrayException::Error::INDEX_LESS_0);
-	if (index > this->index) throw ArrayException(ArrayException::Error::INDEX_BIGGER_MAX_SIZE);
+	if (index > this->arraySize) throw ArrayException(ArrayException::Error::INDEX_BIGGER_MAX_SIZE);
 	this->index = index;
 }
 
 void Array::setPtrArray(int* ptrArray)
 {
-	delete[] this->ptrArray;
+	if (arraySize >= 0 && index >= 0) {
+		delete[] this->ptrArray;
+	}
 	this->ptrArray = ptrArray;
+
 }
 
 char* Array::toString()
@@ -223,9 +232,143 @@ char* Array::toStringWithPtr()
 	return ch;
 }
 
+bool Array::isEqual(Array& array)
+{
+	int* currentArray = ptrArray;
+	int* arr2 = array.getPtrArray();
+	int i = 0;
+	while (*arr2 > 0 && *currentArray > 0 && i < array.getIndex()) {
+		if (*arr2 != *currentArray) {
+			break;
+		}
+		else {
+			if (*(arr2 + 1) <= 0 && *(currentArray + 1) <= 0) {
+				return true;
+			}
+			if (i >= array.getIndex()) {
+				break;
+			}
+		}
+		arr2++;
+		currentArray++;
+		i++;
+	}
+
+	return false;
+}
+
+Array& Array::operator= (Array& array)
+{
+	arraySize = array.getArraySize();
+	index = array.getIndex();
+	ptrArray = array.getPtrArray();
+	return *this;
+}
+
+Array& operator+(Array& array1, Array& array2)
+{
+	Array* arr = new Array();
+
+	arr->setArraySize(array1.getArraySize() + array2.getArraySize());
+	arr->setIndex(array1.getIndex() + array2.getIndex());
+	
+	int* ptrRes = new int[arr->getArraySize()];
+	memset(ptrRes, -1, arr->getArraySize() * sizeof(int));
+	int* ptrArr1 = array1.getPtrArray();
+	int* ptrArr2 = array2.getPtrArray();
+
+	int i;
+	for (i = 0; i < array1.getIndex(); i++) {
+		ptrRes[i] = ptrArr1[i];
+	}
+	for (int j = 0; j < array2.getIndex(); j++, i++) {
+		ptrRes[i] = ptrArr2[j];
+	}
+	
+	delete[] ptrArr1;
+	delete[] ptrArr2;
+
+	arr->setPtrArray(ptrRes);
+
+	return *arr;
+}
+
+Array& operator-(Array& array1, Array& array2)
+{
+	Array* arr = new Array();
+
+	int* ptrRes = new int[array1.getArraySize() + array2.getArraySize()];
+	memset(ptrRes, -1, arr->getArraySize() * sizeof(int));
+	int* ptrArr1 = array1.getPtrArray();
+	int* ptrArr2 = array2.getPtrArray();
+
+	int i = 0;
+	for (int j = 0; j < array1.getIndex(); j++) {
+		bool equal = false;
+		for (int k = 0; k < array2.getIndex(); k++) {
+			if (ptrArr1[j] == ptrArr2[k]) {
+				equal = true;
+				break;
+			}
+		}
+
+		if (!equal) {
+			ptrRes[i] = ptrArr1[j];
+			i++;
+		}
+	}
+
+	arr->setArraySize(i + 2);
+	arr->setIndex(i);
+
+	delete[] ptrArr1;
+	delete[] ptrArr2;
+
+	arr->setPtrArray(ptrRes);
+	arr->collapse();
+
+	return *arr;
+}
+
+Array& operator-(Array& array, int index)
+{
+	array.deleteElement(index);
+
+	return array;
+}
+
+Array& Array::operator--()
+{
+	for (int i = 0; i < index; i++) {
+		if (ptrArray[i] - 1 > 1) {
+			ptrArray[i]--;
+		}
+	}
+
+	return *this;
+}
+
+Array& Array::operator--(int d)
+{
+	for (int i = 0; i < index; i++) {
+		if (ptrArray[i] - 1 > 1) {
+			ptrArray[i]--;
+		}
+	}
+
+	return *this;
+}
+
+int& Array::operator[](const int index)
+{
+	return ptrArray[index];
+}
+
 Array::~Array()
 {
-	delete[] ptrArray;
+	if (index > 0 && arraySize > 0) {
+		delete[] ptrArray;
+	}
 }
 
 char* Array::intToChar(int number)
