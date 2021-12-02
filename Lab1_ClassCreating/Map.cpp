@@ -29,22 +29,24 @@ void Map::add(const char* key, int value)
 
     if (getIndex() == getArraySize() - 1) {
         setArraySize(getArraySize() * 2);
-        char** temp = new char* [getArraySize() * 2];
+        char** temp = new char* [getArraySize() * 10];
         for (int i = 0; i < getIndex(); i++) {
             temp[i] = new char[32];
             strcpy_s(temp[i], 32 * sizeof(char), keysArray[i]);
             delete[] keysArray[i];
         }
+        delete[] keysArray;
 
-        temp[getIndex()] = new char[32];
         keysArray = temp;
     }
+
+    keysArray[getIndex()] = new char[32];
 
     strcpy_s(keysArray[getIndex()], 32 * sizeof(char), key);
     Array::add(value);
 }
 
-int Map::getElement(const char* key)
+int Map::getValue(const char* key)
 {
     if (key == 0 || strcmp(key, "") == 0) throw ArrayException(ArrayException::Error::MAP_KEY_EMPTY);
 
@@ -55,7 +57,7 @@ int Map::getElement(const char* key)
     return -1;
 }
 
-char* Map::findElement(int value)
+char* Map::findKeyByValue(int value)
 {
     if (value < 0) throw ArrayException(ArrayException::Error::NEGATIVE_VALUE);
 
@@ -105,7 +107,7 @@ void Map::deleteElement(const char* key)
 
 void Map::setKeysArray(char** keysArray)
 {
-    if (keysArray[0][0] != '\0') {
+    if (this->keysArray[0][0] != '\0') {
         for (int i = 0; i < getIndex(); i++) {
             delete[] this->keysArray[i];
         }
@@ -134,7 +136,6 @@ Map& Map::operator=(Map& map)
     setArraySize(map.getArraySize());
     setIndex(map.getIndex());
     keysArray = map.getKeysArray();
-
     return *this;
 }
 
@@ -166,6 +167,12 @@ Map& Map::operator--(int d)
     setPtrArray(ptrArr);
 
     return *this;
+}
+
+int& Map::operator[](const char* key)
+{
+    int &element = this->Array::operator[](findElement(getValue(key)));
+    return element;
 }
 
 Map& operator+(Map& map1, Map& map2)
@@ -250,7 +257,6 @@ Map& operator-(Map& map1, Map& map2)
         }
     }
 
-
     delete[] ptrArr1;
     delete[] ptrArr2;
 
@@ -261,6 +267,47 @@ Map& operator-(Map& map1, Map& map2)
     return *map;
 }
 
+Map& operator-(Map& map, const char* key)
+{
+    map.deleteElement(key);
+    return map;
+}
+
+std::ostream& operator<<(std::ostream& out, Map& map)
+{
+    out << map.toString();
+
+    return out;
+}
+
+std::istream& operator>>(std::istream& in, Map& map)
+{
+    int arraySize;
+    cout << "Array size: ";
+    in >> arraySize;
+    map.setArraySize(arraySize);
+
+    int index;
+    cout << "Index: ";
+    in >> index;
+    cout << "Key and value: ";
+    map.setIndex(index);
+
+    char** ch = new char* [map.getArraySize()];
+    int* ptr = new int[map.getArraySize()];
+
+    for (int i = 0; i < map.getIndex(); i++) {
+        ch[i] = new char[32];
+        ch[i][0] = '\0';
+        in >> ch[i];
+
+        in >> ptr[i];
+    }
+    map.setPtrArray(ptr);
+    map.setKeysArray(ch);
+
+    return in;
+}
 char* Map::toString()
 {
     char ch[1024] = "";

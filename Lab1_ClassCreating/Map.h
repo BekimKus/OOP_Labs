@@ -10,9 +10,9 @@ public:
 
 	void add(const char* key, int value);
 
-	int getElement(const char* key);
+	int getValue(const char* key);
 
-	char* findElement(int value);
+	char* findKeyByValue(int value);
 
 	void replace(const char* key, int value);
 
@@ -22,20 +22,26 @@ public:
 
 	char** getKeysArray();
 
+	virtual char* toString();
+
 	Map& operator=(Map& map);
 
 	friend Map& operator+(Map& map1, Map& map2);
 
 	friend Map& operator-(Map& map1, Map& map2);
 
-	//friend Map& operator-(Map& array, const char* key);
+	friend Map& operator-(Map& map, const char* key);
 
 	Map& operator--(void);
 
 	Map& operator--(int d);
 
-	virtual char* toString();
+	int& operator[](const char* key);
 
+	friend std::ostream& operator<< (std::ostream& out, Map& array);
+
+	friend std::istream& operator>> (std::istream& in, Map& array);
+	
 	~Map();
 
 private:

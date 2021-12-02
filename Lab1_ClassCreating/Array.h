@@ -16,7 +16,6 @@ public:
 
 	Array();
 
-
 	void sort();
 
 	void add(int value, int index);
@@ -64,6 +63,10 @@ public:
 	Array& operator--(int d);
 
 	int& operator[](const int index);
+
+	friend std::ostream& operator<< (std::ostream& out, Array& array);
+
+	friend std::istream& operator>> (std::istream& in, Array& array);
 
 	~Array();
 

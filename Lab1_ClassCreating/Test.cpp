@@ -341,7 +341,7 @@ void Test::test5()
     map.add("key5", 88);
     cout << "\n" << map.toString() << std::endl;
 
-    cout << "Key 'key1' contain: " << map.getElement("key1") << std::endl;
+    cout << "Key 'key1' contain: " << map.getValue("key1") << std::endl;
     cout << "First key containing value 90: " << map.findElement(90) << std::endl;
     
     cout << "Replace first element with 884\n";
@@ -408,8 +408,6 @@ void Test::test6()
     queue.push(19);
     queue.push(80);
 
-    //Array& arr2 = queue;
-
     Map map;
     map.add("key1", 677);
     map.add("key2", 283);
@@ -454,7 +452,7 @@ void Test::test7()
 {
     cout << "\n==============================================\n\n";
     cout << "Test number 7: Checking Operators\n\n";
-    /*
+    
     cout << "Checking Array\n\n";
 
     Array arr1;
@@ -490,9 +488,8 @@ void Test::test7()
     arr3[1] = 23;
     cout << "arr3[1] = " << arr3[1] << "\n";
     cout << "Third array:\n" << arr3.toString() << "\n";
-    */
-    
-    /*
+
+
     cout << "--------------------------------------\nCheking Queue\n\n";
 
     Queue q1;
@@ -522,9 +519,9 @@ void Test::test7()
     q3--;
     --q3;
     cout << "Third queue:\n" << q3.toString() << "\n";
-    */
 
     cout << "--------------------------------------\nCheking Map\n\n";
+    Map map3;
     Map map1;
     map1.add("key1", 677);
     map1.add("key2", 283);
@@ -539,7 +536,6 @@ void Test::test7()
     map2.add("code4", 6728);
     cout << "Second map:\n" << map2.toString() << "\n";
 
-    Map map3;
     map3 = map2;
     cout << "Third map equal to second:\n" << map3.toString() << "\n";
 
@@ -548,6 +544,39 @@ void Test::test7()
 
     map3 = map3 - map2;
     cout << "Third map minus second:\n" << map3.toString() << "\n";
+
+    map3--;
+    --map3;
+    map3["key1"] = 666;
+    cout << "map3[\"key1\"] = " << map3["key1"] << "\n";
+
+    map3 = map3 - "key2";
+    cout << "Third map:\n" << map3.toString() << "\n";
+
+}
+
+void Test::test8()
+{
+    cout << "\n==============================================\n\n";
+    cout << "Test number 8: Checking override input and output operators\n\n";
+
+    cout << "Checking Array\n\n";
+    Array arr;
+    //std::cin >> arr;
+    //cout << arr << "\n";
+
+    cout << "--------------------------------------\nCheking Queue\n\n";
+    Queue queue;
+    /*
+    std::cin >> queue;
+    cout << queue << "\n";
+    */
+
+
+    cout << "--------------------------------------\nCheking Map\n\n";
+    Map map;
+    std::cin >> map;
+    cout << map << "\n";
 }
 
 bool Test::equal(Array& array, int* expectedArray)

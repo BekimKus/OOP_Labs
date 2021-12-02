@@ -30,7 +30,6 @@ int main()
     catch (ArrayException& e) {
         cout << "==================================\n" << e.what() << "\n==================================\n";
     }
-    
 
     try {
         Test::test6();
@@ -38,25 +37,32 @@ int main()
     catch (ArrayException& e) {
         cout << "==================================\n" << e.what() << "\n==================================\n";
     }
-    */
-
+    
     try {
         Test::test7();
     }
     catch (ArrayException& e) {
         cout << "==================================\n" << e.what() << "\n==================================\n";
     }
-
+    */
+    try {
+        Test::test8();
+    }
+    catch (ArrayException& e) {
+        cout << "==================================\n" << e.what() << "\n==================================\n";
+    }
+    
     /*
+    Map map1;
     Map map;
     map.add("key1", 25);
-    map.add("key2", 76);
+    map.add("key2", 1);
     map.add("key3", 90);
     map.add("key4", 649);
     map.add("key5", 88);
+    map.add("error", 404);
 
-    Map map1;
-    map1 = map;
+    map1 = map - "key1";
     cout << "\n" << map1.toString() << std::endl;
     */
 }

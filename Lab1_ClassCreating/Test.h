@@ -21,6 +21,8 @@ public:
 	void static test6();
 
 	void static test7();
+	
+	void static test8();
 
 private:
 	static bool equal(Array& realArray, int* expectedArray);

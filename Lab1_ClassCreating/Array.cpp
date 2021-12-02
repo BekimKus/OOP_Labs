@@ -163,11 +163,6 @@ void Array::setArraySize(int arraySize)
 	memcpy_s(temp, (arraySize + 1) * sizeof(int), ptrArray, arraySize * sizeof(int));
 	delete[] ptrArray;
 	ptrArray = temp;
-	/*
-	for (int i = index; i < arraySize; i++)
-		ptrArray[i] = -1;
-	*/
-
 }
 
 void Array::setIndex(int index)
@@ -335,6 +330,32 @@ Array& operator-(Array& array, int index)
 	array.deleteElement(index);
 
 	return array;
+}
+
+std::ostream& operator<<(std::ostream& out, Array& array)
+{
+	out << array.toString();
+
+	return out;
+}
+
+std::istream& operator>>(std::istream& in, Array& array)
+{
+	cout << "Array size: ";
+	in >> array.arraySize;
+	cout << "Index: ";
+	in >> array.index;
+	cout << "Array: ";
+
+	int* ptr = new int[array.arraySize];
+	memset(ptr, -1, array.getArraySize() * sizeof(int));
+
+	for (int i = 0; i < array.index; i++) {
+		in >> ptr[i];
+	}
+	array.setPtrArray(ptr);
+
+	return in;
 }
 
 Array& Array::operator--()

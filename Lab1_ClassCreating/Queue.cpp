@@ -12,6 +12,26 @@ int Queue::pop()
 	return temp;
 }
 
+char* Queue::toString()
+{
+	char ch[255] = "";
+	int* ptr = new int[getArraySize()];
+	ptr = getPtrArray();
+
+	for (int i = 0; i < getIndex(); i++) {
+		char val[10] = "";
+		_itoa_s(ptr[i], val, 10);
+		strcat_s(ch, sizeof(ch), val);
+		strcat_s(ch, sizeof(ch), "-> \0");
+	}
+
+	char* str = new char[sizeof(ch)];
+	strcpy_s(str, sizeof(ch), ch);
+	delete[] ptr;
+
+	return str;
+}
+
 Queue& Queue::operator=(Queue& array)
 {
 	setPtrArray(array.getPtrArray());
@@ -115,23 +135,32 @@ Queue& operator-(Queue& queue1, Queue& queue2)
 	return *queue;
 }
 
-
-char* Queue::toString()
+std::ostream& operator<<(std::ostream& out, Queue& queue)
 {
-	char ch[255] = "";
-	int* ptr = new int[getArraySize()];
-	ptr = getPtrArray();
+	out << queue.toString();
 
-	for (int i = 0; i < getIndex(); i++) {
-		char val[10] = "";
-		_itoa_s(ptr[i], val, 10);
-		strcat_s(ch, sizeof(ch), val);
-		strcat_s(ch, sizeof(ch), "-> \0");
+	return out;
+}
+
+std::istream& operator>>(std::istream& in, Queue& queue)
+{
+	int arraySize;
+	cout << "Array size: ";
+	in >> arraySize;
+	queue.setArraySize(arraySize);
+
+	int index;
+	cout << "Index: ";
+	in >> index;
+	cout << "Array: ";
+	queue.setIndex(index);
+
+	int* ptr = new int[queue.getArraySize()];
+
+	for (int i = 0; i < queue.getIndex(); i++) {
+		in >> ptr[i];
 	}
+	queue.setPtrArray(ptr);
 
-	char* str = new char[sizeof(ch)];
-	strcpy_s(str, sizeof(ch), ch);
-	delete[] ptr;
-
-	return str;
+	return in;
 }

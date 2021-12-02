@@ -7,6 +7,8 @@ public:
 
 	int pop();
 
+	virtual char* toString();
+
 	Queue& operator=(Queue& queue);
 
 	Queue& operator--(void);
@@ -17,6 +19,9 @@ public:
 
 	friend Queue& operator-(Queue& queue1, Queue& queue2);
 
-	virtual char* toString();
+	friend std::ostream& operator<< (std::ostream& out, Array& array);
+
+	friend std::istream& operator>> (std::istream& in, Array& array);
+
 };
 
