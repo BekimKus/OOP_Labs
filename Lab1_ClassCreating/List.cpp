@@ -20,13 +20,14 @@ void List::add(Array& array)
 {
 	Node* temp, * p;
 	temp = (Node*)malloc(sizeof(Node));
+	Array& arr = array;
 
 	if (head == NULL) {
-		head = (Node*)malloc(sizeof(Node));
-		head->array = array;
+		head = (Node*)malloc(sizeof(Node));		
+		head->array = &array;
 		head->next = head;
 		head->prev = head;
-		head->type = Type::Arr;
+		//head->type = Type::Arr;
 		length++;
 		return;
 	}
@@ -35,10 +36,10 @@ void List::add(Array& array)
 	p->next = temp;
 	head->prev = temp;
 
-	temp->array = array;
+	temp->array = &array;
 	temp->next = head;
 	temp->prev = p;
-	temp->type = Type::Arr;
+	//temp->type = Type::Arr;
 
 	length++;
 }
@@ -50,10 +51,10 @@ void List::add(Map& map)
 
 	if (head == NULL) {
 		head = (Node*)malloc(sizeof(Node));
-		head->map = map;
+		head->array = &map;
 		head->next = head;
 		head->prev = head;
-		head->type = Type::Mp;
+		//head->type = Type::Mp;
 		length++;
 		return;
 	}
@@ -62,12 +63,12 @@ void List::add(Map& map)
 	p->next = temp;
 	head->prev = temp;
 
-	temp->map = map;
+	temp->array = &map;
 	temp->next = head;
 	temp->prev = p;
 
 	length++;
-	temp->type = Type::Mp;
+	//temp->type = Type::Mp;
 }
 
 void List::add(Queue& queue)
@@ -77,10 +78,10 @@ void List::add(Queue& queue)
 
 	if (head == NULL) {
 		head = (Node*)malloc(sizeof(Node));
-		head->queue = queue;
+		head->array = &queue;
 		head->next = head;
 		head->prev = head;
-		head->type = Type::Que;
+		//head->type = Type::Que;
 		length++;
 		return;
 	}
@@ -89,12 +90,12 @@ void List::add(Queue& queue)
 	p->next = temp;
 	head->prev = temp;
 
-	temp->queue = queue;
+	temp->array = &queue;
 	temp->next = head;
 	temp->prev = p;
 
 	length++;
-	temp->type = Type::Que;
+	//temp->type = Type::Que;
 }
 
 void List::insert(Array& array, int index)
@@ -102,10 +103,10 @@ void List::insert(Array& array, int index)
 	Node* current = head;
 	if (head == NULL) {
 		head = (Node*)malloc(sizeof(Node));
-		head->array = array;
+		head->array = &array;
 		head->next = head;
 		head->prev = head;
-		head->type = Type::Arr;
+		//head->type = Type::Arr;
 		return;
 	}
 		
@@ -120,10 +121,10 @@ void List::insert(Array& array, int index)
 	p->next = temp;
 	current->prev = temp;
 
-	temp->array = array;
+	temp->array = &array;
 	temp->next = current;
 	temp->prev = p;
-	temp->type = Type::Arr;
+	//temp->type = Type::Arr;
 
 	if (index == 0) {
 		head = temp;
@@ -137,10 +138,10 @@ void List::insert(Map& map, int index)
 	Node* current = head;
 	if (head == NULL) {
 		head = (Node*)malloc(sizeof(Node));
-		head->map = map;
+		head->array = &map;
 		head->next = head;
 		head->prev = head;
-		head->type = Type::Mp;
+		//head->type = Type::Mp;
 		return;
 	}
 
@@ -154,10 +155,10 @@ void List::insert(Map& map, int index)
 	p->next = temp;
 	current->prev = temp;
 
-	temp->map = map;
+	temp->array = &map;
 	temp->next = current;
 	temp->prev = p;
-	temp->type = Type::Mp;
+	//temp->type = Type::Mp;
 
 	if (index == 0) {
 		head = temp;
@@ -171,10 +172,10 @@ void List::insert(Queue& queue, int index)
 	Node* current = head;
 	if (head == NULL) {
 		head = (Node*)malloc(sizeof(Node));
-		head->queue = queue;
+		head->array = &queue;
 		head->next = head;
 		head->prev = head;
-		head->type = Type::Que;
+		//head->type = Type::Que;
 		return;
 	}
 
@@ -188,10 +189,10 @@ void List::insert(Queue& queue, int index)
 	p->next = temp;
 	current->prev = temp;
 
-	temp->queue = queue;
+	temp->array = &queue;
 	temp->next = current;
 	temp->prev = p;
-	temp->type = Type::Que;
+	//temp->type = Type::Que;
 
 	if (index == 0) {
 		head = temp;
@@ -207,14 +208,7 @@ Array& List::getElement(int index)
 		current = current->next;
 	}
 
-	switch (current->type) {
-		case Type::Arr:
-			return current->array;
-		case Type::Que:
-			return current->queue;
-		case Type::Mp:
-			return current->map;
-	}
+	return *current->array;
 }
 
 int List::getLength()
@@ -245,11 +239,11 @@ void List::deleteByIndex(int index)
 
 	first->next = second;
 	second->prev = first;
-	delete current;
 
 	if (current == head) {
 		head = second;
 	}
+	delete current;
 	length--;
 }
 
@@ -257,9 +251,11 @@ int List::find(Array& array)
 {
 	Node* current = head;
 	for (int i = 0; i < length; i++) {
-		if (current->array.getArraySize() == array.getArraySize() &&
-			current->array.getIndex() == array.getIndex() && 
-			current->array.isEqual(array)) {
+		Array arr;
+		arr = *current->array;
+		if (arr.getArraySize() == array.getArraySize() &&
+			arr.getIndex() == array.getIndex() &&
+			arr.isEqual(array)) {
 			return i;
 		}
 
@@ -273,9 +269,11 @@ int List::find(Queue& queue)
 {
 	Node* current = head;
 	for (int i = 0; i < length; i++) {
-		if (current->queue.getArraySize() == queue.getArraySize() &&
-			current->queue.getIndex() == queue.getIndex() &&
-			current->queue.isEqual(queue)) {
+		Array arr;
+		arr = *current->array;
+		if (arr.getArraySize() == queue.getArraySize() &&
+			arr.getIndex() == queue.getIndex() &&
+			arr.isEqual(queue)) {
 			return i;
 		}
 
@@ -289,9 +287,11 @@ int List::find(Map& map)
 {
 	Node* current = head;
 	for (int i = 0; i < length; i++) {
-		if (current->map.getArraySize() == map.getArraySize() &&
-			current->map.getIndex() == map.getIndex() &&
-			current->map.isEqual(map)) {
+		Array arr;
+		arr = *current->array;
+		if (arr.getArraySize() == map.getArraySize() &&
+			arr.getIndex() == map.getIndex() &&
+			arr.isEqual(map)) {
 			return i;
 		}
 
@@ -309,14 +309,14 @@ char* List::toString()
 	char* ptr = new char[sizeof(ch)];
 
 	for (int i = 0; i < length; i++) {
-		Array arr;
-		Queue queue;
-		Map map;
+		Array& arr = *current->array;
+		/*Queue queue;
+		Map map;*/
 
 		char* temp = new char[1];
 		temp[0] = '\0';
 
-		switch (current->type) {
+		/*switch (current->type) {
 		case Type::Arr:
 			arr = current->array;
 			temp = arr.toString();
@@ -329,7 +329,10 @@ char* List::toString()
 			map = current->map;
 			temp = map.toString();
 			break;
-		}
+		}*/
+
+		//arr = *current->array;
+		temp = arr.toString();
 
 		sprintf_s(ptr, sizeof(ch), "%s==> \0", temp);
 		strcat_s(ch, sizeof(ch), ptr);

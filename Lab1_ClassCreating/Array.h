@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <fstream>
 #include <string.h>
 #include "ArrayException.h"
 
@@ -44,6 +45,10 @@ public:
 
 	void setPtrArray(int* ptrArray);
 
+	void toTxtFile(const char* path);
+
+	//void loadFromTxtFile(const char* path);
+
 	virtual char* toString();
 
 	char* toStringWithPtr();
@@ -67,6 +72,8 @@ public:
 	friend std::ostream& operator<< (std::ostream& out, Array& array);
 
 	friend std::istream& operator>> (std::istream& in, Array& array);
+	
+	friend std::ofstream& operator<< (std::ofstream& out, Array& array);
 
 	~Array();
 

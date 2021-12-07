@@ -42,18 +42,18 @@ public:
 	~List();
 
 protected:
-	enum Type {
+	/*enum Type {
 		Arr,
 		Que,
 		Mp
-	};
+	};*/
 
 private:
 	struct Node {
-		Array array;
-		Queue queue;
+		Array* array;
+		/*Queue queue;
 		Map map;
-		Type type;
+		Type type;*/
 
 		Node* next;
 		Node* prev;

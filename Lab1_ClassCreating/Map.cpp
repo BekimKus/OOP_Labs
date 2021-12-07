@@ -308,6 +308,67 @@ std::istream& operator>>(std::istream& in, Map& map)
 
     return in;
 }
+std::ifstream& operator>>(std::ifstream& in, Map& map)
+{
+    int arraySize;
+    in >> arraySize;
+    map.setArraySize(arraySize);
+
+    int index;
+    in >> index;
+    map.setIndex(index);
+
+    int* ptr = new int[map.getArraySize()];
+    char** keys = new char* [arraySize];
+    memset(ptr, -1, map.getArraySize() * sizeof(int));
+
+    for (int i = 0; i < map.getIndex(); i++) {
+        keys[i] = new char[32];
+        keys[i][0] = '\0';
+        in >> keys[i];
+
+        in >> ptr[i];
+    }
+    map.setPtrArray(ptr);
+
+    return in;
+}
+std::ofstream& operator<<(std::ofstream& out, Map& map)
+{
+    // Clean for txt file
+    char** keys = map.getKeysArray();
+    int sizeCh = 1024;
+    char ch[1024] = "";
+    int i;
+    for (i = 0; i < map.getIndex(); i++) {
+        char val[10] = "";
+        char* temp = *(keys++);
+        _itoa_s(map.Array::getElement(i), val, 10);
+        strcat_s(ch, sizeof(ch), temp);
+        strcat_s(ch, sizeof(ch), ": ");
+        strcat_s(ch, sizeof(ch), val);
+        strcat_s(ch, sizeof(ch), " \0");
+    }
+    keys -= i;
+    char* ptr = new char[sizeof(ch)];
+    strcpy_s(ptr, sizeof(ch), ch);
+
+    // string for txt file
+    char val[10] = "";
+    _itoa_s(map.getArraySize(), val, 10);
+    strcat_s(ch, sizeCh, val);
+    strcat_s(ch, sizeCh, " ");
+    _itoa_s(map.getIndex(), val, 10);
+    strcat_s(ch, sizeCh, val);
+    strcat_s(ch, sizeCh, "\t");
+    strcat_s(ch, sizeCh, ptr);
+    strcat_s(ch, sizeCh, "\n\0");
+
+    out << ch;
+
+    return out;
+}
+
 char* Map::toString()
 {
     char ch[1024] = "";

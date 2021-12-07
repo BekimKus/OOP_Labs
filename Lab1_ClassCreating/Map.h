@@ -38,9 +38,14 @@ public:
 
 	int& operator[](const char* key);
 
-	friend std::ostream& operator<< (std::ostream& out, Map& array);
+	friend std::ostream& operator<< (std::ostream& out, Map& map);
 
-	friend std::istream& operator>> (std::istream& in, Map& array);
+	friend std::istream& operator>> (std::istream& in, Map& map);
+
+	friend std::ifstream& operator>> (std::ifstream& in, Map& map);
+
+	friend std::ofstream& operator<< (std::ofstream& out, Map& map);
+
 	
 	~Map();
 

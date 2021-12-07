@@ -3,13 +3,14 @@
 #include "Queue.h"
 #include "List.h"
 #include "Test.h"
-
 using std::cout;
+/*
 
 int main()
 {
+    
     setlocale(LC_ALL, "");
-    /*
+    
     Test::test1();
 
     Test::test2();
@@ -30,29 +31,29 @@ int main()
     catch (ArrayException& e) {
         cout << "==================================\n" << e.what() << "\n==================================\n";
     }
-
+    
     try {
-        Test::test6();
+        //Test::test6();
     }
     catch (ArrayException& e) {
         cout << "==================================\n" << e.what() << "\n==================================\n";
     }
     
     try {
-        Test::test7();
-    }
-    catch (ArrayException& e) {
-        cout << "==================================\n" << e.what() << "\n==================================\n";
-    }
-    */
-    try {
-        Test::test8();
+        //Test::test7();
     }
     catch (ArrayException& e) {
         cout << "==================================\n" << e.what() << "\n==================================\n";
     }
     
-    /*
+    try {
+        //Test::test8();
+    }
+    catch (ArrayException& e) {
+        cout << "==================================\n" << e.what() << "\n==================================\n";
+    }
+    
+    
     Map map1;
     Map map;
     map.add("key1", 25);
@@ -64,5 +65,6 @@ int main()
 
     map1 = map - "key1";
     cout << "\n" << map1.toString() << std::endl;
-    */
+    
 }
+*/

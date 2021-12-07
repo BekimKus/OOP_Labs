@@ -156,6 +156,7 @@ std::istream& operator>>(std::istream& in, Queue& queue)
 	queue.setIndex(index);
 
 	int* ptr = new int[queue.getArraySize()];
+	memset(ptr, -1, queue.getArraySize() * sizeof(int));
 
 	for (int i = 0; i < queue.getIndex(); i++) {
 		in >> ptr[i];
@@ -163,4 +164,45 @@ std::istream& operator>>(std::istream& in, Queue& queue)
 	queue.setPtrArray(ptr);
 
 	return in;
+}
+
+std::ifstream& operator>>(std::ifstream& in, Queue& queue)
+{
+	int arraySize;
+	in >> arraySize;
+	queue.setArraySize(arraySize);
+
+	int index;
+	in >> index;
+	queue.setIndex(index);
+
+	int* ptr = new int[queue.getArraySize()];
+	memset(ptr, -1, queue.getArraySize() * sizeof(int));
+
+	for (int i = 0; i < queue.getIndex(); i++) {
+		in >> ptr[i];
+	}
+	queue.setPtrArray(ptr);
+
+	return in;
+}
+
+std::ofstream& operator<<(std::ofstream& out, Queue& queue)
+{
+	int sizeCh = 512;
+	char* ch = new char[sizeCh];
+	ch[0] = '\0';
+	char val[10] = "";
+	_itoa_s(queue.getArraySize(), val, 10);
+	strcat_s(ch, sizeCh, val);
+	strcat_s(ch, sizeCh, " ");
+	_itoa_s(queue.getIndex(), val, 10);
+	strcat_s(ch, sizeCh, val);
+	strcat_s(ch, sizeCh, "\t");
+	strcat_s(ch, sizeCh, queue.Array::toString());
+	strcat_s(ch, sizeCh, "\n\0");
+
+	out << ch;
+
+	return out;
 }

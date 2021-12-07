@@ -1,4 +1,7 @@
 #pragma once
+#include <iostream>
+#include <fstream>
+#include <string.h>
 #include "Array.h"
 #include "ArrayException.h"
 #include "Map.h"

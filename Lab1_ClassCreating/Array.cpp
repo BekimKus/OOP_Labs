@@ -181,6 +181,13 @@ void Array::setPtrArray(int* ptrArray)
 
 }
 
+void Array::toTxtFile(const char* path)
+{
+	std::ofstream out(path, std::ios::out);
+	out << this;
+	out.close();
+}
+
 char* Array::toString()
 {
 	char ch[255] = "";
@@ -341,11 +348,8 @@ std::ostream& operator<<(std::ostream& out, Array& array)
 
 std::istream& operator>>(std::istream& in, Array& array)
 {
-	cout << "Array size: ";
 	in >> array.arraySize;
-	cout << "Index: ";
 	in >> array.index;
-	cout << "Array: ";
 
 	int* ptr = new int[array.arraySize];
 	memset(ptr, -1, array.getArraySize() * sizeof(int));
@@ -356,6 +360,26 @@ std::istream& operator>>(std::istream& in, Array& array)
 	array.setPtrArray(ptr);
 
 	return in;
+}
+
+std::ofstream& operator<<(std::ofstream& out, Array& array)
+{
+	int sizeCh = 512;
+	char* ch = new char[sizeCh];
+	ch[0] = '\0';
+	char val[10] = "";
+	_itoa_s(array.getArraySize(), val, 10);
+	strcat_s(ch, sizeCh, val);
+	strcat_s(ch, sizeCh, " ");
+	_itoa_s(array.getIndex(), val, 10);
+	strcat_s(ch, sizeCh, val);
+	strcat_s(ch, sizeCh, "\t");
+	strcat_s(ch, sizeCh, array.toString());
+	strcat_s(ch, sizeCh, "\n\0");
+
+	out << ch;
+
+	return out;
 }
 
 Array& Array::operator--()
@@ -382,6 +406,9 @@ Array& Array::operator--(int d)
 
 int& Array::operator[](const int index)
 {
+	if (index > this->index) throw ArrayException(ArrayException::Error::INDEX_BIGGER_MAX_SIZE);
+	if (index < 0) throw ArrayException(ArrayException::Error::INDEX_LESS_0);
+
 	return ptrArray[index];
 }
 
