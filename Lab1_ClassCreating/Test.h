@@ -7,6 +7,8 @@
 #include "Map.h"
 #include "Queue.h"
 #include "List.h"
+#include "ListT.h"
+#include "TStack.h"
 
 class Test
 {

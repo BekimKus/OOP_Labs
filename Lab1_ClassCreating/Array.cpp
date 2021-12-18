@@ -267,6 +267,40 @@ Array& Array::operator= (Array& array)
 	return *this;
 }
 
+bool operator<(Array& array1, Array& array2)
+{
+	if (array1.getIndex() < array2.getIndex()) {
+		return true;
+	}
+	else if (array1.getIndex() == array2.getIndex()) {
+		int* ptr1 = array1.getPtrArray();
+		int* ptr2 = array2.getPtrArray();
+		for (int i = 0; i < array1.getIndex(); i++) {
+			if (ptr1[i] < ptr2[i]) {
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+bool operator>(Array& array1, Array& array2)
+{
+	if (array1.getIndex() > array2.getIndex()) {
+		return true;
+	}
+	else if (array1.getIndex() == array2.getIndex()) {
+		int* ptr1 = array1.getPtrArray();
+		int* ptr2 = array2.getPtrArray();
+		for (int i = 0; i < array1.getIndex(); i++) {
+			if (ptr1[i] > ptr2[i]) {
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
 Array& operator+(Array& array1, Array& array2)
 {
 	Array* arr = new Array();

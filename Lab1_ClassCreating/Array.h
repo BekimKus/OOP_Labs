@@ -15,6 +15,8 @@ public:
 
 	Array(Array& array);
 
+	Array(const Array& array);
+
 	Array();
 
 	void sort();
@@ -56,6 +58,10 @@ public:
 	bool isEqual(Array& array);
 
 	Array& operator=(Array& array);
+
+	friend bool operator< (const Array& array1, const Array& array2);
+
+	friend bool operator> (const Array& array1, const Array& array2);
 
 	friend Array& operator+(Array& array1, Array& array2);
 

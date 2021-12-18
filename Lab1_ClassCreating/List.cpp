@@ -6,16 +6,6 @@ List::List()
 	length = 0;
 }
 
-
-List::List(Array& arr)
-{
-	/*head = (Node*)malloc(sizeof(Node));
-	head->array = arr;
-	head->next = head;
-	head->prev = head;
-	length = 1;*/
-}
-
 void List::add(Array& array)
 {
 	Node* temp, * p;
@@ -310,28 +300,9 @@ char* List::toString()
 
 	for (int i = 0; i < length; i++) {
 		Array& arr = *current->array;
-		/*Queue queue;
-		Map map;*/
 
 		char* temp = new char[1];
 		temp[0] = '\0';
-
-		/*switch (current->type) {
-		case Type::Arr:
-			arr = current->array;
-			temp = arr.toString();
-			break;
-		case Type::Que:
-			queue = current->queue;
-			temp = queue.toString();
-			break;
-		case Type::Mp:
-			map = current->map;
-			temp = map.toString();
-			break;
-		}*/
-
-		//arr = *current->array;
 		temp = arr.toString();
 
 		sprintf_s(ptr, sizeof(ch), "%s==> \0", temp);

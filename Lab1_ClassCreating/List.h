@@ -7,8 +7,6 @@ class List
 {
 public:
 	List();
-
-	List(Array& arr);
 	
 	void add(Array& arr);
 	
@@ -41,19 +39,9 @@ public:
 
 	~List();
 
-protected:
-	/*enum Type {
-		Arr,
-		Que,
-		Mp
-	};*/
-
 private:
 	struct Node {
 		Array* array;
-		/*Queue queue;
-		Map map;
-		Type type;*/
 
 		Node* next;
 		Node* prev;
