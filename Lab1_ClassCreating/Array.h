@@ -49,6 +49,8 @@ public:
 
 	void toTxtFile(const char* path);
 
+	void fromTxtFile(const char* path);
+	
 	//void loadFromTxtFile(const char* path);
 
 	virtual char* toString();

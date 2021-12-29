@@ -184,8 +184,19 @@ void Array::setPtrArray(int* ptrArray)
 void Array::toTxtFile(const char* path)
 {
 	std::ofstream out(path, std::ios::out);
-	out << this;
+	out << arraySize << " " << index << "\t" << *this;
 	out.close();
+}
+
+void Array::fromTxtFile(const char* path)
+{
+	std::ifstream in(path);
+
+	if (in.is_open()) {
+		in >> *this;
+	}
+
+	in.close();
 }
 
 char* Array::toString()
